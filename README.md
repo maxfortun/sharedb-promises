@@ -1,0 +1,2 @@
+# sharedb-promises
+ShareDB Promises
