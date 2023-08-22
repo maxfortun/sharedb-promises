@@ -33,7 +33,21 @@ describe('doc', function() {
 
 	it('create', async function () {
 		const { doc } = this;
-		return await ShareDBPromises.doc(doc).create({name: 'fido'});
+		await ShareDBPromises.doc(doc).create({name: 'fido'});
+		expect(doc.data.name).to.eql('fido');
+	});
+
+	it('fetch', async function () {
+		const { doc } = this;
+		debug("doc", doc);
+
+		const doc2 = this.connection.get('dogs', 'fido');
+		debug("doc2", doc2);
+
+		await ShareDBPromises.doc(doc).create({name: 'fido'});
+
+		debug("doc2", doc2);
+		expect(doc2.data.name).to.eql('fido');
 	});
 
 });
