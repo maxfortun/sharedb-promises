@@ -1,0 +1,35 @@
+{
+  "name": "sharedb-promises",
+  "version": "0.0.1",
+  "description": "ShareDB Promises",
+  "config": {
+    "main": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxfortun/sharedb-promises.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "author": "Max Fortun <max@maxf.net>",
+  "license": "ISC",
+  "keywords": [ "sharedb", "promise" ],
+  "scripts": {
+    "lint": "eslint $npm_package_config_main",
+    "test": "DEBUG=sharedb-promises* mocha",
+	"release": "git tag | grep -q ^$npm_package_version\\$ && echo \"Release $npm_package_version already exists.\" || ( ( git diff-index --quiet HEAD || git commit -a -m \"Releasing $npm_package_version\" ) ; git push && git tag $npm_package_version && git push origin $npm_package_version; npm publish )"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "eslint": "^6.8.0",
+    "mocha": "^10.2.0",
+    "sharedb": "^4.0.0",
+    "sinon": "^15.2.0",
+    "sinon-chai": "^3.7.0"
+  },
+  "dependencies": {
+    "debug": "^4.3.4"
+  }
+}
