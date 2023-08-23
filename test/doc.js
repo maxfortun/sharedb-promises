@@ -63,4 +63,21 @@ describe('doc', function() {
 		expect(doc2.data).to.eql({ name: 'fido', color: 'gray' });
 	});
 
+	it('subscribe', async function () {
+		const { doc } = this;
+
+		await ShareDBPromises.doc(doc).create({name: 'fido'});
+
+		const doc2 = this.connection.get('dogs', 'fido');
+
+		return new Promise(async (resolve, reject) => {
+			doc2.on('op', op => {
+				expect(op).to.eql([ { p: [ 'color' ], oi: 'gray' } ]);
+				resolve(doc);
+			});
+
+			await ShareDBPromises.doc(doc).submitOp([ { p: ['color'], oi: 'gray' } ]);
+		});
+	});
+
 });

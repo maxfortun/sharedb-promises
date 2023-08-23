@@ -60,7 +60,7 @@ class Doc {
 	}
 	
 	async subscribe() {
-		const [ doc ] = arguments;
+		const { doc } = this;
 	
 		return new Promise((resolve, reject) => {
 			this.debug("subscribe >", doc.collection, doc.id);
