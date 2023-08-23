@@ -26,18 +26,18 @@ class Doc {
 		});
 	}
 
-	async submitOp() {
+	async del() {
 		const { doc } = this;
-		const [ op, options ] = arguments;
+		const [ options ] = arguments;
 	
 		return new Promise((resolve, reject) => {
-			this.debug("submitOp >", doc.collection, doc.id, op, options);
-			doc.submitOp(op, options, (err) => {
+			this.debug("del >", doc.collection, doc.id);
+			doc.del(options, (err) => {
 				if (err) {
-					this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
+					this.debug("del !", doc.collection, doc.id, err, err.stack);
 					return reject(err);
 				}
-				this.debug("submitOp <", doc.collection, doc.id, op, options);
+				this.debug("del <", doc.collection, doc.id, doc.data);
 				return resolve(doc);
 			});
 		});
@@ -58,7 +58,25 @@ class Doc {
 			});
 		});
 	}
+
+	async submitOp() {
+		const { doc } = this;
+		const [ op, options ] = arguments;
 	
+		return new Promise((resolve, reject) => {
+			this.debug("submitOp >", doc.collection, doc.id, op, options);
+			doc.submitOp(op, options, (err) => {
+				if (err) {
+					this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
+					return reject(err);
+				}
+				this.debug("submitOp <", doc.collection, doc.id, op, options);
+				return resolve(doc);
+			});
+		});
+	}
+
+
 	async subscribe() {
 		const { doc } = this;
 	
@@ -74,7 +92,45 @@ class Doc {
 			});
 		});
 	}
+
+	async unsubscribe() {
+		const { doc } = this;
 	
+		return new Promise((resolve, reject) => {
+			this.debug("unsubscribe >", doc.collection, doc.id);
+			doc.subscribe((err) => {
+				if (err) {
+					this.debug("unsubscribe !", doc.collection, doc.id, err, err.stack);
+					return reject(err);
+				}
+				this.debug("unsubscribe <", doc.collection, doc.id);
+				return resolve(doc);
+			});
+		});
+	}
+
+	async fetchOrCreate() {
+		const [ doc, data ] = arguments;
+	
+		return fetch(doc)
+		.then(() => {
+			if (doc.type !== null) {
+				return doc;
+			}
+	
+			return create(doc, data);
+		});
+	}
+	
+	async fetchOrCreateAndSubscribe() {
+		const [ doc, data ] = arguments;
+	
+		return fetchOrCreate(doc, data)
+		.then(() => {
+			return subscribe(doc);
+		});
+	}
+
 }
 
 module.exports = Doc;
