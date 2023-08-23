@@ -1,7 +1,7 @@
 'use strict';
 
 const Debug			= require('debug');
-const debug			= new Debug('sharedb-promises:test:doc');
+const debugPrefix	= 'sharedb-promises:test:doc:';
 const sharedbDebug	= new Debug('sharedb-promises:sharedb');
 
 const chai  = require('chai');
@@ -28,6 +28,8 @@ describe('doc', function() {
 		this.connection = this.backend.connect();
 		this.connection.debug = sharedbDebug.enabled;
 
+		this.debug = new Debug(debugPrefix + this.currentTest.title);
+
 		const doc = this.doc = this.connection.get('dogs', 'fido');
 	});
 
@@ -37,17 +39,28 @@ describe('doc', function() {
 		expect(doc.data.name).to.eql('fido');
 	});
 
+	it('submitOp', async function () {
+		const { doc } = this;
+		const doc2 = this.connection.get('dogs', 'fido');
+
+		await ShareDBPromises.doc(doc).create({name: 'fido'});
+		await ShareDBPromises.doc(doc).submitOp([{p: ['color'], oi: 'gray'}]);
+
+		expect(doc2.data.color).to.eql('gray');
+	});
+
 	it('fetch', async function () {
 		const { doc } = this;
-		debug("doc", doc);
-
-		const doc2 = this.connection.get('dogs', 'fido');
-		debug("doc2", doc2);
 
 		await ShareDBPromises.doc(doc).create({name: 'fido'});
 
-		debug("doc2", doc2);
-		expect(doc2.data.name).to.eql('fido');
+		const doc2 = this.connection.get('dogs', 'fido');
+
+		await ShareDBPromises.doc(doc).submitOp([{p: ['color'], oi: 'gray'}]);
+
+		await ShareDBPromises.doc(doc).fetch();
+
+		expect(doc2.data).to.eql({ name: 'fido', color: 'gray' });
 	});
 
 });

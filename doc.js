@@ -26,8 +26,25 @@ class Doc {
 		});
 	}
 
+	async submitOp() {
+		const { doc } = this;
+		const [ op, options ] = arguments;
+	
+		return new Promise((resolve, reject) => {
+			this.debug("submitOp >", doc.collection, doc.id, op, options);
+			doc.submitOp(op, options, (err) => {
+				if (err) {
+					this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
+					return reject(err);
+				}
+				this.debug("submitOp <", doc.collection, doc.id, op, options);
+				return resolve(doc);
+			});
+		});
+	}
+
 	async fetch() {
-		const [ doc ] = arguments;
+		const { doc } = this;
 	
 		return new Promise((resolve, reject) => {
 			this.debug("fetch >", doc.collection, doc.id);
@@ -58,22 +75,6 @@ class Doc {
 		});
 	}
 	
-	async submitOp() {
-		const [ doc, op, options ] = arguments;
-	
-		return new Promise((resolve, reject) => {
-			this.debug("submitOp >", doc.collection, doc.id, op, options);
-			doc.submitOp(op, options, (err) => {
-				if (err) {
-					this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
-					return reject(err);
-				}
-				this.debug("submitOp <", doc.collection, doc.id, op, options);
-				return resolve(doc);
-			});
-		});
-	}
-
 }
 
 module.exports = Doc;
