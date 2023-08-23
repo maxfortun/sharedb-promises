@@ -24,13 +24,13 @@ const ShareDBPromises = require('../index.js');
 describe('doc', function() {
 
 	beforeEach(async function() {
+		this.debug = new Debug(debugPrefix + this.currentTest.title);
+
 		this.backend = new Backend();
 		this.connection = this.backend.connect();
 		this.connection.debug = sharedbDebug.enabled;
 
-		this.debug = new Debug(debugPrefix + this.currentTest.title);
-
-		const doc = this.doc = this.connection.get('dogs', 'fido');
+		this.doc = this.connection.get('dogs', 'fido');
 	});
 
 	it('create', async function () {

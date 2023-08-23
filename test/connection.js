@@ -24,17 +24,23 @@ const ShareDBPromises = require('../index.js');
 describe('connection', function() {
 
 	beforeEach(async function() {
+		this.debug = new Debug(debugPrefix + this.currentTest.title);
+
 		this.backend = new Backend();
 		this.connection = this.backend.connect();
 		this.connection.debug = sharedbDebug.enabled;
 
-		this.debug = new Debug(debugPrefix + this.currentTest.title);
+		this.doc = this.connection.get('dogs', 'fido');
 	});
 
 	it('fetchSnapshot', async function () {
-		const { connection } = this;
-		// await ShareDBPromises.connection(connection).fetchSnapshot();
-		// expect(doc.data.name).to.eql('fido');
+		const { connection, doc } = this;
+
+		await ShareDBPromises.doc(doc).create({name: 'fido'});
+
+		const snapshot = await ShareDBPromises.connection(connection).fetchSnapshot(doc.collection, doc.id);
+
+		expect(snapshot.v).to.eql(1);
 	});
 
 });
