@@ -80,4 +80,13 @@ describe('doc', function() {
 		});
 	});
 
+	it('createData', async function () {
+		const { doc } = this;
+
+		await ShareDBPromises.doc(doc).create({name: 'fido'});
+		await ShareDBPromises.doc(doc).createData({ color: 'gray' });
+		this.debug(doc.data);
+
+	});
+
 });

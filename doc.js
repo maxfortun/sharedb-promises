@@ -128,6 +128,83 @@ class Doc {
 		return this.subscribe();
 	}
 
+	getPath(data) {
+		let path = [];
+	
+		while(data && typeof data === "object") {
+			let keys = Object.keys(data);
+	
+			if(keys.length == 0) {
+				break;
+			}
+	
+			if(keys.length != 1) {
+				if(path.length > 0) {
+					path.pop();
+				}
+	
+				return path;
+			}
+	
+			let key = keys[0];
+			path.push(key);
+			data = data[key];
+		}
+	
+		return path;
+	}
+
+	createDataOp() {
+		const { doc } = this;
+		const [ data ] = arguments;
+	
+		let path = this.getPath(data);
+		// this.debug("creating data", doc, path, data);
+		let insertPath = [];
+	
+		let parentData = null;
+		let docData = doc.data;
+	
+		let _data = data; // modifiable
+		for(let i = 0; i < path.length && docData != undefined; i++) {
+			let key = path[i];
+			insertPath.push(key);
+			_data = _data[key];
+			parentData = docData;
+			docData = docData[key];
+		}
+	
+		if(null != docData) {
+			// this.debug("createDataOp already exists", path, doc);
+			return {path};
+		}
+	
+		let action = "oi";
+		if(Array.isArray(parentData)) {
+			action = "li";
+		} else if (typeof parentData === "string") {
+			action = "si";
+		}
+	
+		let op = { p: insertPath };
+		op[action] = _data;
+	
+		// this.debug("createDataOp", op, doc);
+		return {path, op};
+	}
+
+	async createData() {
+		const [ data ] = arguments;
+
+		let opInfo = this.createDataOp(data);
+		if(!opInfo.op) {
+			return opInfo.path;
+		}
+
+		return this.submitOp([opInfo.op])
+			.then(() => opInfo.path);
+	}
+	
 }
 
 module.exports = Doc;
