@@ -110,25 +110,22 @@ class Doc {
 	}
 
 	async fetchOrCreate() {
-		const [ doc, data ] = arguments;
+		const { doc } = this;
+		const [ data ] = arguments;
 	
-		return fetch(doc)
-		.then(() => {
-			if (doc.type !== null) {
-				return doc;
-			}
+		await this.fetch();
+		if (doc.type !== null) {
+			return doc;
+		}
 	
-			return create(doc, data);
-		});
+		return this.create(data);
 	}
 	
 	async fetchOrCreateAndSubscribe() {
-		const [ doc, data ] = arguments;
+		const [ data ] = arguments;
 	
-		return fetchOrCreate(doc, data)
-		.then(() => {
-			return subscribe(doc);
-		});
+		await this.fetchOrCreate(data);
+		return this.subscribe();
 	}
 
 }
