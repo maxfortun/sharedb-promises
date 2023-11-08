@@ -15,14 +15,19 @@ class Doc {
 	
 		return new Promise((resolve, reject) => {
 			this.debug("create >", doc.collection, doc.id);
-			doc.create(data, (err) => {
-				if (err) {
-					this.debug("create !", doc.collection, doc.id, err, err.stack);
-					return reject(err);
-				}
-				this.debug("create <", doc.collection, doc.id, doc.data);
-				return resolve(doc);
-			});
+			try {
+				doc.create(data, (err) => {
+					if (err) {
+						this.debug("create !", doc.collection, doc.id, err, err.stack);
+						return reject(err);
+					}
+					this.debug("create <", doc.collection, doc.id, doc.data);
+					return resolve(doc);
+				});
+			} catch(err) {
+				this.debug("create !", doc.collection, doc.id, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 
@@ -32,14 +37,19 @@ class Doc {
 	
 		return new Promise((resolve, reject) => {
 			this.debug("del >", doc.collection, doc.id);
-			doc.del(options, (err) => {
-				if (err) {
-					this.debug("del !", doc.collection, doc.id, err, err.stack);
-					return reject(err);
-				}
-				this.debug("del <", doc.collection, doc.id, doc.data);
-				return resolve(doc);
-			});
+			try {
+				doc.del(options, (err) => {
+					if (err) {
+						this.debug("del !", doc.collection, doc.id, err, err.stack);
+						return reject(err);
+					}
+					this.debug("del <", doc.collection, doc.id, doc.data);
+					return resolve(doc);
+				});
+			} catch(err) {
+				this.debug("del !", doc.collection, doc.id, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 
@@ -48,14 +58,19 @@ class Doc {
 	
 		return new Promise((resolve, reject) => {
 			this.debug("fetch >", doc.collection, doc.id);
-			doc.fetch((err) => {
-				if (err) {
-					this.debug("fetch !", doc.collection, doc.id, err, err.stack);
-					return reject(err);
-				}
-				this.debug("fetch <", doc.collection, doc.id, doc.data);
-				return resolve(doc);
-			});
+			try {
+				doc.fetch((err) => {
+					if (err) {
+						this.debug("fetch !", doc.collection, doc.id, err, err.stack);
+						return reject(err);
+					}
+					this.debug("fetch <", doc.collection, doc.id, doc.data);
+					return resolve(doc);
+				});
+			} catch(err) {
+				this.debug("fetch !", doc.collection, doc.id, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 
@@ -65,14 +80,19 @@ class Doc {
 	
 		return new Promise((resolve, reject) => {
 			this.debug("submitOp >", doc.collection, doc.id, op, options);
-			doc.submitOp(op, options, (err) => {
-				if (err) {
-					this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
-					return reject(err);
-				}
-				this.debug("submitOp <", doc.collection, doc.id, op, options);
-				return resolve(doc);
-			});
+			try {
+				doc.submitOp(op, options, (err) => {
+					if (err) {
+						this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
+						return reject(err);
+					}
+					this.debug("submitOp <", doc.collection, doc.id, op, options);
+					return resolve(doc);
+				});
+			} catch(err) {
+				this.debug("submitOp !", doc.collection, doc.id, op, options, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 
@@ -82,14 +102,19 @@ class Doc {
 	
 		return new Promise((resolve, reject) => {
 			this.debug("subscribe >", doc.collection, doc.id);
-			doc.subscribe((err) => {
-				if (err) {
-					this.debug("subscribe !", doc.collection, doc.id, err, err.stack);
-					return reject(err);
-				}
-				this.debug("subscribe <", doc.collection, doc.id);
-				return resolve(doc);
-			});
+			try {
+				doc.subscribe((err) => {
+					if (err) {
+						this.debug("subscribe !", doc.collection, doc.id, err, err.stack);
+						return reject(err);
+					}
+					this.debug("subscribe <", doc.collection, doc.id);
+					return resolve(doc);
+				});
+			} catch(err) {
+				this.debug("subscribe !", doc.collection, doc.id, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 
@@ -98,14 +123,19 @@ class Doc {
 	
 		return new Promise((resolve, reject) => {
 			this.debug("unsubscribe >", doc.collection, doc.id);
-			doc.subscribe((err) => {
-				if (err) {
-					this.debug("unsubscribe !", doc.collection, doc.id, err, err.stack);
-					return reject(err);
-				}
-				this.debug("unsubscribe <", doc.collection, doc.id);
-				return resolve(doc);
-			});
+			try {
+				doc.subscribe((err) => {
+					if (err) {
+						this.debug("unsubscribe !", doc.collection, doc.id, err, err.stack);
+						return reject(err);
+					}
+					this.debug("unsubscribe <", doc.collection, doc.id);
+					return resolve(doc);
+				});
+			} catch(err) {
+				this.debug("unsubscribe !", doc.collection, doc.id, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 

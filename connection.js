@@ -20,14 +20,19 @@ class Connection {
 
 		return new Promise((resolve, reject) => {
 			this.debug("fetchSnapshot >", collection, id, _version);
-			connection.fetchSnapshot(collection, id, _version, (err, snapshot) => {
-				if (err) {
-					this.error("fetchSnapshot !", collection, id, _version, err, err.stack);
-					return reject(err);
-				}
-				this.debug("fetchSnapshot <", collection, id, _version, snapshot);
-				return resolve(snapshot);
-			});
+			try {
+				connection.fetchSnapshot(collection, id, _version, (err, snapshot) => {
+					if (err) {
+						this.error("fetchSnapshot !", collection, id, _version, err, err.stack);
+						return reject(err);
+					}
+					this.debug("fetchSnapshot <", collection, id, _version, snapshot);
+					return resolve(snapshot);
+				});
+			} catch(err) {
+				this.error("fetchSnapshot !", collection, id, _version, err, err.stack);
+				return reject(err);
+			}
 		});
 	}
 
