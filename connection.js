@@ -5,8 +5,8 @@ const Debug				= require('debug');
 class Connection {
 	constructor(connection) {
 		this.connection = connection;
-		this.debug = new Debug('sharedb-promises:connection:' );
-		this.error = new Debug('sharedb-promises:connection:error' );
+		this.debug = new Debug('sharedb-promises:connection:debug');
+		this.error = new Debug('sharedb-promises:connection:error');
 		return this;
 	}
 	
